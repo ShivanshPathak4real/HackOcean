@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DeepSea Guardian - AI-Powered Ocean Monitoring</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter for clean UI -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- GSAP & ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+
+<style data-purpose="custom-config">
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #020617; /* Deep Navy */
+      color: #f8fafc;
+    }
+    .glow-text {
+      text-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .carousel-item {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      z-index: 0;
+    }
+    .carousel-item.active {
+      opacity: 1;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(2, 6, 23, 0.4), rgba(2, 6, 23, 1));
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+    .nav-link:hover {
+      color: #22d3ee; /* cyan-400 */
+    }
+
+    /* Cinematic Motion & Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    .animate-float-delayed {
+      animation: float 7s ease-in-out 1s infinite;
+    }
+
+    /* Custom Cursor */
+    #custom-cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #22d3ee;
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-hover #custom-cursor {
+      width: 50px;
+      height: 50px;
+      background: rgba(34, 211, 238, 0.1);
+      border-width: 1px;
+    }
+
+    /* Glass Shimmer Effect */
+    .glass-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .glass-shimmer::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+      transform: rotate(45deg);
+      transition: 0.8s;
+      opacity: 0;
+    }
+    .glass-shimmer:hover::after {
+      opacity: 1;
+      left: 100%;
+      top: 100%;
+    }
+
+    /* Reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stat-reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .stat-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Species Card Specific Hover */
+    .species-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px -15px rgba(34, 211, 238, 0.3);
+      border-color: rgba(34, 211, 238, 0.5);
+    }
+
+
+    /* Volumetric Light Rays */
+    .light-rays {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        15deg,
+        transparent 0%,
+        rgba(34, 211, 238, 0.02) 1.5%,
+        transparent 3%,
+        transparent 12%
+      );
+      pointer-events: none;
+      animation: raysSweep 25s linear infinite alternate;
+      mix-blend-mode: screen;
+    }
+    @keyframes raysSweep {
+      0% { transform: scale(1.15) translateX(-3%) rotate(-1deg); opacity: 0.4; }
+      100% { transform: scale(1.15) translateX(3%) rotate(1deg); opacity: 0.9; }
+    }
+
+    /* Sonar Pulse */
+    .sonar-pulse {
+      position: absolute;
+      border: 1px solid rgba(34, 211, 238, 0.15);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: sonarPing 4s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+    }
+    @keyframes sonarPing {
+      0% { width: 0; height: 0; opacity: 0.6; }
+      100% { width: 600px; height: 600px; opacity: 0; }
+    }
+    .sonar-pulse:nth-child(2) { animation-delay: 1.3s; }
+    .sonar-pulse:nth-child(3) { animation-delay: 2.6s; }
+
+    /* Drifting Particle */
+    .drift-particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(34, 211, 238, 0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: driftFloat 20s linear infinite;
+    }
+    @keyframes driftFloat {
+      0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+      10% { opacity: 0.8; }
+      50% { transform: translate(40px, -30vh) scale(1); }
+      90% { opacity: 0.3; }
+      100% { transform: translate(-20px, -60vh) scale(0.5); opacity: 0; }
+    }
+
+    /* Floating Bubbles */
+    .bubbles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      bottom: -100px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1) 60%, rgba(34, 211, 238, 0.4));
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.2), inset 0 0 10px rgba(255,255,255,0.5);
+      animation: floatUp 15s infinite ease-in;
+    }
+    .bubble::after {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      width: 25%;
+      height: 25%;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      filter: blur(1px);
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      50% { transform: translateY(-50vh) scale(1) translateX(20px); }
+      90% { opacity: 0.8; }
+      100% { transform: translateY(-120vh) scale(1.2) translateX(-20px); opacity: 0; }
+    }
+    .bubble:nth-child(1) { left: 10%; width: 40px; height: 40px; animation-duration: 12s; animation-delay: 0s; }
+    .bubble:nth-child(2) { left: 25%; width: 25px; height: 25px; animation-duration: 18s; animation-delay: 3s; }
+    .bubble:nth-child(3) { left: 45%; width: 50px; height: 50px; animation-duration: 14s; animation-delay: 1s; }
+    .bubble:nth-child(4) { left: 65%; width: 30px; height: 30px; animation-duration: 16s; animation-delay: 5s; }
+    .bubble:nth-child(5) { left: 85%; width: 45px; height: 45px; animation-duration: 13s; animation-delay: 2s; }
+    .bubble:nth-child(6) { left: 15%; width: 20px; height: 20px; animation-duration: 17s; animation-delay: 7s; }
+    .bubble:nth-child(7) { left: 55%; width: 35px; height: 35px; animation-duration: 15s; animation-delay: 4s; }
+    .bubble:nth-child(8) { left: 75%; width: 25px; height: 25px; animation-duration: 19s; animation-delay: 6s; }
+    .bubble:nth-child(9) { left: 95%; width: 15px; height: 15px; animation-duration: 11s; animation-delay: 8s; }
+    .bubble:nth-child(10) { left: 35%; width: 30px; height: 30px; animation-duration: 20s; animation-delay: 9s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-in-up, .animate-float, .animate-float-delayed, .reveal, .stat-reveal {
+        animation: none;
+        transition: none;
+        opacity: 1;
+        transform: none;
+      }
+      #custom-cursor { display: none; }
+      body { cursor: auto; }
+    }
+  </style>
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            deepSea: '#020617',
+            cyanGlow: '#22d3ee',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="overflow-x-hidden">
+<div id="custom-cursor"></div>
+<!-- BEGIN: MainHeader -->
+<header class="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-deepSea/80 backdrop-blur-md border-b border-white/5">
+<nav class="max-w-7xl mx-auto flex items-center justify-between">
+<!-- Logo -->
+<div class="flex items-center gap-2 group cursor-pointer interactive">
+<div class="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.5)]">
+<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.641.319a4 4 0 01-1.833.466H8.5a2 2 0 01-2-2V8a2 2 0 012-2h3.833a4 4 0 011.832.467l.642.319a6 6 0 003.859.517l2.388-.477a2 2 0 001.021-.547M8.222 9.041a3.5 3.5 0 016.709 0m-6.71 5.918a3.5 3.5 0 016.71 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="text-xl font-bold tracking-tight">DeepSea <span class="text-cyan-400">Guardian</span></span>
+</div>
+<!-- Nav Links -->
+<ul class="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-300">
+<li class=""><a class="nav-link interactive" href="index.html">Home</a></li>
+<li class=""><a class="nav-link interactive" href="#">Features</a></li>
+<li class=""><a class="nav-link interactive" href="dashboard.html">Dashboard</a></li>
+<li class=""><a class="nav-link interactive" href="dashboard.html">Ocean Map</a></li>
+<li class=""><a class="nav-link interactive" href="analytics.html">Analytics</a></li>
+<li class=""><a class="nav-link interactive" href="#">Reports</a></li>
+<li class=""><a class="nav-link text-cyan-400 border-b-2 border-cyan-400 pb-1 interactive" href="contact.html">Contact</a></li>
+</ul>
+<!-- CTA -->
+<button class="bg-cyan-500 hover:bg-cyan-400 text-white px-6 py-2 rounded-lg font-semibold transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] interactive">
+        Get Started
+      </button>
+</nav>
+</header>
+<!-- END: MainHeader -->\n
+<!-- BEGIN: Contact Content -->
+<main class="pt-24 pb-20">
+    <!-- Hero Section -->
+    <section class="relative py-20 px-6 overflow-hidden flex flex-col items-center justify-center text-center">
+        <div class="absolute inset-0 bg-[url('deep_sea_hero.png')] bg-cover bg-center opacity-30"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-deepSea/80 to-deepSea z-0"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 animate-fade-in-up">
+                Get in <span class="text-cyan-400 glow-text">Touch</span>
+            </h1>
+            <p class="text-xl text-slate-300 animate-fade-in-up" style="animation-delay: 0.2s;">
+                We're here to answer any questions about our AI-powered ocean monitoring platform.
+            </p>
+        </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-6 space-y-24">
+        
+        <!-- Contact Form & Contact Info -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Contact Form -->
+            <div class="glass-card p-8 rounded-2xl reveal">
+                <h2 class="text-2xl font-bold mb-6 text-white">Send a Message</h2>
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">First Name</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Last Name</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 transition-all">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Email Address</label>
+                        <input type="email" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Subject</label>
+                        <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Message</label>
+                        <textarea rows="4" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 transition-all"></textarea>
+                    </div>
+                    <button type="button" class="w-full bg-cyan-500 hover:bg-cyan-400 text-white px-6 py-3 rounded-lg font-bold transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] interactive">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="reveal" style="transition-delay: 0.2s;">
+                <h2 class="text-2xl font-bold mb-6 text-white">Contact Information</h2>
+                <p class="text-slate-400 mb-8 leading-relaxed">
+                    Have questions about our data, partnerships, or technology? Reach out directly. Our global team is available 24/7 to support marine conservation efforts.
+                </p>
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-cyan-500/10 rounded-lg border border-cyan-500/20 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-white">Email Us</h4>
+                            <p class="text-cyan-400">contact@deepseaguardian.org</p>
+                            <p class="text-slate-500 text-sm">For general inquiries and support</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-cyan-500/10 rounded-lg border border-cyan-500/20 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-white">Call Us</h4>
+                            <p class="text-cyan-400">+1 (555) OCEAN-AI</p>
+                            <p class="text-slate-500 text-sm">Mon-Fri from 9am to 6pm (EST)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-cyan-500/10 rounded-lg border border-cyan-500/20 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-white">Global Headquarters</h4>
+                            <p class="text-cyan-400">Marine Science Park</p>
+                            <p class="text-slate-500 text-sm">100 Ocean Drive, Suite 300<br>San Francisco, CA 94105</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Office Locations -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold mb-8 text-center text-white">Our Global Offices</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Office Card 1 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-cyan-500/50 transition-all cursor-pointer">
+                    <h3 class="text-xl font-bold text-white mb-2">North America</h3>
+                    <p class="text-cyan-400 text-sm mb-4">San Francisco, CA</p>
+                    <p class="text-slate-400 text-sm">Primary research facility and AI development hub.</p>
+                </div>
+                <!-- Office Card 2 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-cyan-500/50 transition-all cursor-pointer">
+                    <h3 class="text-xl font-bold text-white mb-2">Europe</h3>
+                    <p class="text-cyan-400 text-sm mb-4">Lisbon, Portugal</p>
+                    <p class="text-slate-400 text-sm">European operations and policy partnerships.</p>
+                </div>
+                <!-- Office Card 3 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-cyan-500/50 transition-all cursor-pointer">
+                    <h3 class="text-xl font-bold text-white mb-2">Asia Pacific</h3>
+                    <p class="text-cyan-400 text-sm mb-4">Sydney, Australia</p>
+                    <p class="text-slate-400 text-sm">Reef monitoring and regional data center.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive World Map -->
+        <section class="reveal">
+            <div class="glass-card rounded-2xl p-2 relative h-[400px] overflow-hidden flex items-center justify-center">
+                <div class="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Eckert_IV_projection_SW.jpg')] bg-cover bg-center opacity-30 mix-blend-screen"></div>
+                <div class="absolute inset-0 bg-deepSea/60"></div>
+                
+                <!-- Map Pings -->
+                <div class="absolute top-[30%] left-[15%]">
+                    <div class="w-3 h-3 bg-cyan-400 rounded-full"></div>
+                    <div class="absolute inset-0 w-3 h-3 bg-cyan-400 rounded-full animate-ping"></div>
+                </div>
+                <div class="absolute top-[40%] left-[45%]">
+                    <div class="w-3 h-3 bg-cyan-400 rounded-full"></div>
+                    <div class="absolute inset-0 w-3 h-3 bg-cyan-400 rounded-full animate-ping"></div>
+                </div>
+                <div class="absolute top-[60%] left-[80%]">
+                    <div class="w-3 h-3 bg-cyan-400 rounded-full"></div>
+                    <div class="absolute inset-0 w-3 h-3 bg-cyan-400 rounded-full animate-ping"></div>
+                </div>
+
+                <div class="relative z-10 text-center">
+                    <h3 class="text-2xl font-bold text-white mb-2">Global Presence</h3>
+                    <p class="text-slate-300">Monitoring oceans across 3 continents</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 reveal">
+            <div class="glass-card p-8 rounded-2xl text-center hover:-translate-y-2 transition-transform">
+                <div class="w-16 h-16 bg-cyan-500/10 rounded-full mx-auto flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Technical Support</h3>
+                <p class="text-slate-400 text-sm mb-6">Need help with our API or platform integrations?</p>
+                <a href="#" class="text-cyan-400 hover:text-cyan-300 font-medium">Get Tech Support →</a>
+            </div>
+            <div class="glass-card p-8 rounded-2xl text-center hover:-translate-y-2 transition-transform">
+                <div class="w-16 h-16 bg-cyan-500/10 rounded-full mx-auto flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Partnerships</h3>
+                <p class="text-slate-400 text-sm mb-6">Join our network of conservation organizations.</p>
+                <a href="#" class="text-cyan-400 hover:text-cyan-300 font-medium">Partner with Us →</a>
+            </div>
+            <div class="glass-card p-8 rounded-2xl text-center hover:-translate-y-2 transition-transform">
+                <div class="w-16 h-16 bg-cyan-500/10 rounded-full mx-auto flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Press Inquiries</h3>
+                <p class="text-slate-400 text-sm mb-6">Download our media kit and contact PR.</p>
+                <a href="#" class="text-cyan-400 hover:text-cyan-300 font-medium">Media Center →</a>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="max-w-3xl mx-auto reveal">
+            <h2 class="text-3xl font-bold mb-8 text-center text-white">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="glass-card rounded-lg p-6">
+                    <h4 class="text-lg font-bold text-white mb-2">How can researchers access the data?</h4>
+                    <p class="text-slate-400 text-sm">Verified marine biologists and research institutions can apply for API access through our Partnerships portal.</p>
+                </div>
+                <!-- FAQ 2 -->
+                <div class="glass-card rounded-lg p-6">
+                    <h4 class="text-lg font-bold text-white mb-2">Is the platform open source?</h4>
+                    <p class="text-slate-400 text-sm">Select machine learning models and dataset schemas are open-sourced on our GitHub to encourage community contributions.</p>
+                </div>
+                <!-- FAQ 3 -->
+                <div class="glass-card rounded-lg p-6">
+                    <h4 class="text-lg font-bold text-white mb-2">How do I report an environmental anomaly?</h4>
+                    <p class="text-slate-400 text-sm">Users can submit reports via the 'Contact Form' on this page, and our AI will triage the data against satellite imagery.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="reveal">
+            <div class="glass-card rounded-2xl p-12 text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-cyan-500/5"></div>
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <h2 class="text-3xl font-bold text-white mb-4">Stay Updated</h2>
+                    <p class="text-slate-300 mb-8">Subscribe to our newsletter for the latest ocean conservation reports and platform updates.</p>
+                    <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+                        <input type="email" placeholder="Enter your email" class="flex-1 bg-deepSea border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50">
+                        <button type="button" class="bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.4)] interactive">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+<!-- END: Contact Content -->
+\n<footer class="bg-surface-container-lowest border-t border-cyan-500/20 pt-20 pb-12 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+<div class="lg:col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<div class="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.5)]">
+<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.641.319a4 4 0 01-1.833.466H8.5a2 2 0 01-2-2V8a2 2 0 012-2h3.833a4 4 0 011.832.467l.642.319a6 6 0 003.859.517l2.388-.477a2 2 0 001.021-.547M8.222 9.041a3.5 3.5 0 016.709 0m-6.71 5.918a3.5 3.5 0 016.71 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="text-xl font-bold tracking-tight text-white">DeepSea <span class="text-cyan-400">Guardian</span></span>
+</div>
+<p class="text-slate-400 text-sm leading-relaxed max-w-sm mb-8">
+          Our mission is to protect the world's oceans through advanced AI monitoring and real-time data analysis, ensuring a healthy marine ecosystem for future generations.
+        </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:border-cyan-400/40 hover:text-cyan-400 transition-all interactive" href="#">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:border-cyan-400/40 hover:text-cyan-400 transition-all interactive" href="#">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:border-cyan-400/40 hover:text-cyan-400 transition-all interactive" href="#">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Platform</h4>
+<ul class="space-y-4 text-sm text-slate-400">
+<li class=""><a class="hover:text-cyan-400 transition-colors interactive" href="#">Features</a></li>
+<li class=""><a class="hover:text-cyan-400 transition-colors interactive" href="dashboard.html">Dashboard</a></li>
+<li class=""><a class="hover:text-cyan-400 transition-colors interactive" href="dashboard.html">Ocean Map</a></li>
+<li class=""><a class="hover:text-cyan-400 transition-colors interactive" href="analytics.html">Analytics</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Conservation</h4>
+<ul class="space-y-4 text-sm text-slate-400">
+<li class=""><a class="hover:text-cyan-400 transition-colors interactive" href="#">Endangered Species</a></li>
+<li class=""><a class="hover:text-cyan-400 transition-colors interactive" href="#">Protection Tools</a></li>
+<li class=""><a class="hover:text-cyan-400 transition-colors interactive" href="#">Reports</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Join the Mission</h4>
+<p class="text-xs text-slate-500 mb-4">Get the latest updates on ocean conservation efforts.</p>
+<div class="relative">
+<input class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500/50 transition-all" placeholder="Email address" type="email"/>
+<button class="absolute right-1 top-1 bottom-1 px-3 bg-cyan-500 hover:bg-cyan-400 rounded-md text-white transition-all interactive">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="mt-8">
+<h4 class="text-white font-bold mb-4">Contact</h4>
+<ul class="space-y-2 text-xs text-slate-400">
+<li class="flex items-center gap-2"><svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg> contact@deepseaguardian.org</li>
+<li class="flex items-center gap-2"><svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg> Global HQ, Marine Science Park</li>
+<li class="flex items-center gap-2"><svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg> +1 (555) OCEAN-AI</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-slate-500 text-xs">© 2023 DeepSea Guardian. Protecting our blue planet.</p>
+<div class="flex gap-8">
+<a class="text-slate-400 hover:text-white transition-colors text-xs interactive" href="#">Privacy Policy</a>
+<a class="text-slate-400 hover:text-white transition-colors text-xs interactive" href="#">Terms of Service</a>
+<a class="text-slate-400 hover:text-white transition-colors text-xs interactive" href="#">Cookie Policy</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+<script>
+  // Statistics Bar Reveal & Count-Up Animation
+  document.addEventListener('DOMContentLoaded', () => {
+    const statsSection = document.getElementById('stats-section');
+    const statItems = statsSection.querySelectorAll('.stat-reveal');
+    const counters = document.querySelectorAll('.counter');
+    
+
+
+    // Reveal Logic (IntersectionObserver — no scroll listener needed)
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealElements.forEach(el => revealObs.observe(el));
+
+    // Counter Animation Logic
+    const countUp = (el) => {
+      const target = parseInt(el.getAttribute('data-target'));
+      const duration = 2000;
+      const stepTime = Math.abs(Math.floor(duration / target));
+      let current = 0;
+      const timer = setInterval(() => {
+        current += Math.ceil(target / 100);
+        if (current >= target) {
+          el.innerText = target.toLocaleString() + (target >= 1000 ? '+' : '');
+          clearInterval(timer);
+        } else {
+          el.innerText = current.toLocaleString();
+        }
+      }, 20);
+    };
+
+    const observerOptions = {
+      threshold: 0.25
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          statItems.forEach((item, index) => {
+            setTimeout(() => {
+              item.classList.add('visible');
+              const counter = item.querySelector('.counter');
+              if (counter) countUp(counter);
+            }, index * 150);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    if (statsSection) {
+      observer.observe(statsSection);
+    }
+
+    // Hero Carousel Logic
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    let currentCarouselIndex = 0;
+    if (carouselItems.length > 0) {
+      setInterval(() => {
+        carouselItems[currentCarouselIndex].classList.remove('active');
+        currentCarouselIndex = (currentCarouselIndex + 1) % carouselItems.length;
+        carouselItems[currentCarouselIndex].classList.add('active');
+      }, 4000);
+    }
+
+    // ========== GSAP ScrollTrigger Canvas Sequence ==========
+    gsap.registerPlugin(ScrollTrigger);
+
+    const canvas = document.getElementById('scroll-canvas');
+    const ctx = canvas.getContext('2d');
+    // Use every 2nd frame (125 total) for half the memory & rendering cost
+    const TOTAL_FILES = 250;
+    const STEP = 2;
+    const frameIndices = [];
+    for (let i = 1; i <= TOTAL_FILES; i += STEP) frameIndices.push(i);
+    const FRAME_COUNT = frameIndices.length; // 125
+    const bitmaps = new Array(FRAME_COUNT);
+    const seq = { frame: 0 };
+    let lastRenderedFrame = -1;
+    let canvasW = 0, canvasH = 0;
+    // Pre-computed cover-fit values (recalculated on resize)
+    let coverDW = 0, coverDH = 0, coverDX = 0, coverDY = 0;
+    let firstImgW = 0, firstImgH = 0;
+
+    // Pre-decode frames into GPU-ready ImageBitmaps
+    frameIndices.forEach((fileIdx, arrIdx) => {
+      const img = new Image();
+      img.src = `frames/ezgif-frame-${String(fileIdx).padStart(3, '0')}.jpg`;
+      img.onload = () => {
+        createImageBitmap(img).then(bmp => {
+          bitmaps[arrIdx] = bmp;
+          if (arrIdx === 0) {
+            firstImgW = bmp.width;
+            firstImgH = bmp.height;
+            resizeCanvas();
+          }
+        });
+      };
+    });
+
+    function computeCover() {
+      if (!firstImgW) return;
+      const cR = canvasW / canvasH;
+      const iR = firstImgW / firstImgH;
+      if (cR > iR) {
+        coverDW = canvasW; coverDH = canvasW / iR;
+        coverDX = 0; coverDY = (canvasH - coverDH) / 2;
+      } else {
+        coverDH = canvasH; coverDW = canvasH * iR;
+        coverDX = (canvasW - coverDW) / 2; coverDY = 0;
+      }
+    }
+
+    function resizeCanvas() {
+      canvasW = window.innerWidth;
+      canvasH = window.innerHeight;
+      canvas.width = canvasW;
+      canvas.height = canvasH;
+      computeCover();
+      lastRenderedFrame = -1;
+      renderFrame();
+    }
+
+    function renderFrame() {
+      const fi = Math.round(seq.frame);
+      if (fi === lastRenderedFrame) return;
+      const bmp = bitmaps[fi];
+      if (!bmp) return;
+      lastRenderedFrame = fi;
+      ctx.drawImage(bmp, coverDX, coverDY, coverDW, coverDH);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    gsap.to(seq, {
+      frame: FRAME_COUNT - 1,
+      snap: 'frame',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#underwater-scroll-wrapper',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+      },
+      onUpdate: renderFrame,
+    });
+
+  });
+</script>
+
+
+</body></html>

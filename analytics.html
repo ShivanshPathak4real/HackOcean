@@ -1,0 +1,902 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>DeepSea Guardian AI | Analytics Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#75d1ff",
+                        "inverse-surface": "#d3e4ff",
+                        "surface": "#00142a",
+                        "on-tertiary-container": "#005041",
+                        "secondary": "#bcc7da",
+                        "outline": "#86929a",
+                        "on-primary-container": "#004c66",
+                        "primary": "#92d9ff",
+                        "on-surface": "#d3e4ff",
+                        "surface-bright": "#273a53",
+                        "on-primary": "#003548",
+                        "surface-container-high": "#172b43",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#75d1ff",
+                        "outline-variant": "#3d484f",
+                        "on-surface-variant": "#bcc8d1",
+                        "on-tertiary-fixed": "#002019",
+                        "inverse-on-surface": "#1d314a",
+                        "on-primary-fixed": "#001e2b",
+                        "surface-container-low": "#061c34",
+                        "secondary-fixed-dim": "#bcc7da",
+                        "secondary-container": "#3c4857",
+                        "on-primary-fixed-variant": "#004d67",
+                        "error-container": "#93000a",
+                        "surface-dim": "#00142a",
+                        "secondary-fixed": "#d8e3f6",
+                        "on-tertiary-fixed-variant": "#005142",
+                        "on-secondary": "#26313f",
+                        "on-background": "#d3e4ff",
+                        "tertiary-fixed-dim": "#00e0bb",
+                        "on-secondary-fixed": "#111c2a",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#22364f",
+                        "surface-variant": "#22364f",
+                        "inverse-primary": "#006688",
+                        "on-secondary-fixed-variant": "#3c4857",
+                        "tertiary-fixed": "#00ffd5",
+                        "on-tertiary": "#00382d",
+                        "tertiary": "#00eac3",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#00cba9",
+                        "surface-container-lowest": "#000f21",
+                        "primary-container": "#00c2ff",
+                        "surface-container": "#0a2038",
+                        "on-secondary-container": "#aab6c8",
+                        "background": "#00142a",
+                        "primary-fixed": "#c2e8ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "card-gap": "20px",
+                        "gutter": "16px",
+                        "container-padding": "24px",
+                        "unit": "4px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #00142a;
+            color: #d3e4ff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 194, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 194, 255, 0.1);
+        }
+        .glow-primary {
+            text-shadow: 0 0 10px rgba(0, 194, 255, 0.6);
+        }
+        .glow-box-primary {
+            box-shadow: 0 0 15px rgba(0, 194, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 194, 255, 0.3);
+            border-radius: 10px;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* ================= RESPONSIVE LAYOUT ================= */
+        /* Sidebar is managed by navigation.js */
+
+        @media (max-width: 1023px) {
+            #header-search {
+                display: none;
+            }
+            main {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            #deploy-drone-text { display: none; }
+            #header-admin-text { display: none; }
+            #header-admin-block { padding-left: 0; border-left: none; margin-left: 0; }
+        }
+
+        @media (max-width: 639px) {
+            .fab-assistant {
+                width: 52px !important;
+                height: 52px !important;
+                bottom: 20px !important;
+                right: 20px !important;
+            }
+            .fab-assistant .material-symbols-outlined {
+                font-size: 24px !important;
+            }
+        }
+
+        /* Metric row: two-up on phones instead of one-up */
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+        @media (min-width: 640px) {
+            .metric-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (min-width: 768px) {
+            .metric-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+        @media (min-width: 1024px) {
+            .metric-row { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+        }
+
+        /* Tooltip box on the trend chart: hide on narrow screens where it would overlap */
+        @media (max-width: 900px) {
+            .trend-tooltip { display: none; }
+        }
+    </style>
+    <script src="navigation.js" defer></script>
+</head>
+<body class="flex min-h-screen">
+<div id="sidebar-placeholder"></div>
+
+
+<!-- Main Content Canvas -->
+<main class="flex-1 min-h-screen pb-6 min-w-0">
+<!-- TopAppBar Integration -->
+<header class="sticky top-0 z-40 w-full flex items-center justify-between gap-3 px-4 sm:px-container-padding h-16 bg-surface/10 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,194,255,0.2)]">
+<div class="flex items-center gap-3 sm:gap-4 min-w-0">
+<button id="menu-toggle" onclick="openSidebar()" class="text-on-surface-variant hover:text-primary shrink-0">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-md text-headline-md font-bold text-primary-container tracking-tighter truncate">Analytics Overview</h2>
+<div id="header-search" class="hidden lg:flex items-center bg-white/5 rounded-full px-4 py-1.5 border border-white/10 ml-4">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md text-on-surface placeholder:text-on-surface-variant/50 w-64 p-0" placeholder="Search parameters..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-2 sm:gap-4 shrink-0">
+<div class="hidden sm:flex items-center gap-2 sm:mr-4">
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<button class="px-3 sm:px-5 py-2 rounded-lg bg-primary text-surface font-label-md font-bold hover:scale-105 active:scale-95 transition-all glow-box-primary whitespace-nowrap">
+<span id="deploy-drone-text">Deploy Drone</span><span class="sm:hidden material-symbols-outlined text-[20px] align-middle" style="display:none">rocket_launch</span>
+                </button>
+<div id="header-admin-block" class="flex items-center gap-3 sm:ml-4 sm:pl-4 sm:border-l border-white/10">
+<div id="header-admin-text" class="text-right">
+<p class="font-label-md text-on-surface">Ocean Admin</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Researcher</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary/30 p-0.5 overflow-hidden shrink-0">
+<img class="w-full h-full object-cover rounded-full" data-alt="Close-up portrait of a maritime researcher with technical headgear, illuminated by a blue-tinted screen light in a futuristic command center. The background is dark and sleek with digital displays. High-contrast cinematic lighting with cool tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY1O9MrqJ3sr7I85GhbWX_GeEQowjS9Ki7ylrqzNPtNHb7r-ovYsGxmfR7EBDxfDYuUzsdK4129vEaloooC5885oUuOoandB9gGwBeCxfw9c_eHIwMyMQzXJWq5qKymUJMdK9p7YlnhkdpQNzo9NCCMDeiwqg1fWLppLa66eqU-1Xp_1ZtypQOIHdjxu93Gt7pHC-uWWuyuhbBJS21PmLWsLK1VObmWNlax6Nq11BN2amoehE8nw_f6bBoFNmdhI3NUvON4ZQ08cVC">
+</div>
+</div>
+</div>
+</header>
+<div class="p-4 sm:p-container-padding space-y-4">
+<!-- Page Header Utility Row -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Real-time Insights</h3>
+<p class="text-body-md text-on-surface-variant">Monitoring global ocean health and environmental anomalies across 5 sectors.</p>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex bg-surface-container-high rounded-lg p-1 border border-white/5">
+<button class="px-3 sm:px-4 py-1.5 rounded-md bg-primary-container text-on-primary-fixed font-label-md whitespace-nowrap">Last 30 Days</button>
+<button class="px-3 sm:px-4 py-1.5 rounded-md text-on-surface-variant font-label-md hover:text-on-surface whitespace-nowrap">Last 7 Days</button>
+</div>
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-white/10 hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span class="font-label-md">Download Report</span>
+</button>
+</div>
+</div>
+<!-- Top Metric Row -->
+<div class="metric-row">
+<!-- Ocean Health Score -->
+<div class="glass-card rounded-xl flex flex-col justify-between p-4">
+<div class="flex items-center justify-between mb-2 mb-4">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary">favorite</span>
+</div>
+<span class="text-tertiary text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 4.2%
+                        </span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-sm">Ocean Health Score</p>
+<h4 class="text-headline-md font-bold text-on-surface">92<span class="text-body-md font-normal opacity-60 ml-1">%</span></h4>
+</div>
+<div class="h-8 mt-3">
+<div class="w-full h-full bg-gradient-to-t from-primary/5 to-transparent flex items-end">
+<div class="w-full h-1 bg-primary/30 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%] shadow-[0_0_8px_rgba(146,217,255,0.8)]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Plastic Waste Detected -->
+<div class="glass-card rounded-xl flex flex-col justify-between p-4">
+<div class="flex items-center justify-between mb-2 mb-4">
+<div class="w-10 h-10 rounded-lg bg-error/10 flex items-center justify-center border border-error/20">
+<span class="material-symbols-outlined text-error">delete_outline</span>
+</div>
+<span class="text-error text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 12.5%
+                        </span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-sm">Plastic Waste Detected</p>
+<h4 class="text-headline-md font-bold text-on-surface">120<span class="text-body-md font-normal opacity-60 ml-1">Tons</span></h4>
+</div>
+<div class="h-8 mt-3 flex items-end gap-1">
+<div class="h-2 flex-1 bg-error/20 rounded-t-sm"></div>
+<div class="h-4 flex-1 bg-error/20 rounded-t-sm"></div>
+<div class="h-3 flex-1 bg-error/20 rounded-t-sm"></div>
+<div class="h-5 flex-1 bg-error/40 rounded-t-sm"></div>
+<div class="h-6 flex-1 bg-error/60 rounded-t-sm"></div>
+</div>
+</div>
+<!-- Coral Health -->
+<div class="glass-card rounded-xl flex flex-col justify-between p-4">
+<div class="flex items-center justify-between mb-2 mb-4">
+<div class="w-10 h-10 rounded-lg bg-tertiary/10 flex items-center justify-center border border-tertiary/20">
+<span class="material-symbols-outlined text-tertiary">psychology</span>
+</div>
+<span class="text-tertiary text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 3.1%
+                        </span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-sm">Coral Health</p>
+<h4 class="text-headline-md font-bold text-on-surface">89<span class="text-body-md font-normal opacity-60 ml-1">%</span></h4>
+</div>
+<div class="h-8 mt-3 overflow-hidden">
+<div class="flex items-end h-full gap-0.5">
+<div class="bg-tertiary/40 w-1 rounded-t h-4"></div>
+<div class="bg-tertiary/40 w-1 rounded-t h-6"></div>
+<div class="bg-tertiary/40 w-1 rounded-t h-5"></div>
+<div class="bg-tertiary w-1 rounded-t h-7"></div>
+<div class="bg-tertiary/40 w-1 rounded-t h-6"></div>
+<div class="bg-tertiary/40 w-1 rounded-t h-8"></div>
+</div>
+</div>
+</div>
+<!-- Marine Species -->
+<div class="glass-card rounded-xl flex flex-col justify-between p-4">
+<div class="flex items-center justify-between mb-2 mb-4">
+<div class="w-10 h-10 rounded-lg bg-surface-tint/10 flex items-center justify-center border border-surface-tint/20">
+<span class="material-symbols-outlined text-surface-tint">water_drop</span>
+</div>
+<span class="text-tertiary text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 8.7%
+                        </span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-sm">Species Tracked</p>
+<h4 class="text-headline-md font-bold text-on-surface">265</h4>
+</div>
+<div class="h-8 mt-3 relative">
+<div class="absolute bottom-0 left-0 w-full h-[2px] bg-white/10"></div>
+<div class="absolute bottom-0 left-0 w-[65%] h-[2px] bg-primary glow-box-primary"></div>
+</div>
+</div>
+<!-- AI Accuracy -->
+<div class="glass-card rounded-xl flex flex-col justify-between p-4">
+<div class="flex items-center justify-between mb-2 mb-4">
+<div class="w-10 h-10 rounded-lg bg-primary-container/10 flex items-center justify-center border border-primary-container/20">
+<span class="material-symbols-outlined text-primary-container">memory</span>
+</div>
+<span class="text-tertiary text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 2.4%
+                        </span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-sm">AI Accuracy</p>
+<h4 class="text-headline-md font-bold text-on-surface">96<span class="text-body-md font-normal opacity-60 ml-1">%</span></h4>
+</div>
+<div class="mt-3 flex justify-between mb-4">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container/40"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container/40"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container/40"></span>
+</div>
+</div>
+<!-- Active Monitoring -->
+<div class="glass-card rounded-xl border-primary/40 bg-primary/5 p-4">
+<div class="flex items-center justify-between mb-2 mb-4">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-surface">radio_button_checked</span>
+</div>
+<span class="text-tertiary text-[10px] font-bold uppercase tracking-wider">LIVE</span>
+</div>
+<div>
+<p class="text-primary-container text-label-sm">Active Monitoring</p>
+<h4 class="text-headline-md font-bold text-on-surface">24/7</h4>
+</div>
+<p class="text-[10px] text-primary/60 mt-2">Always On System</p>
+</div>
+<div class="glass-card rounded-xl flex flex-col justify-between p-4">
+<div class="flex items-center justify-between mb-2 mb-4">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+</div>
+<span class="text-tertiary text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">sensors</span> 98%
+</span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-sm">Drone Fleet Status</p>
+<h4 class="text-headline-md font-bold text-on-surface">42<span class="text-body-md font-normal opacity-60 ml-1">Active</span></h4>
+</div>
+<div class="mt-3 space-y-1">
+<div class="flex justify-between text-[10px] text-on-surface-variant mb-4">
+<span class="">Battery</span>
+<span class="text-primary">84%</span>
+</div>
+<div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[84%] shadow-[0_0_8px_rgba(146,217,255,0.8)]"></div>
+</div>
+<p class="text-[10px] text-tertiary mt-1">12 Sectors Covered</p>
+</div>
+</div><div class="glass-card rounded-xl flex flex-col justify-between p-4"><div class="flex items-center justify-between mb-2 mb-4"><div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20"><span class="material-symbols-outlined text-primary">precision_manufacturing</span></div><span class="text-tertiary text-label-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">sensors</span> 98%</span></div><div><p class="text-on-surface-variant text-label-sm">Drone Fleet</p><h4 class="text-headline-md font-bold text-on-surface">42<span class="text-body-md font-normal opacity-60 ml-1">Active</span></h4></div><div class="mt-3 space-y-1"><div class="flex justify-between text-[10px] text-on-surface-variant mb-4"><span class="">Signal Strength</span><span class="text-primary">98%</span></div><div class="w-full h-1 bg-white/10 rounded-full overflow-hidden"><div class="h-full bg-primary w-[98%] shadow-[0_0_8px_rgba(146,217,255,0.8)]"></div></div></div></div></div>
+<!-- Main Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+<!-- Ocean Health Trend -->
+<div class="lg:col-span-8 glass-card rounded-2xl overflow-hidden relative p-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+                                Ocean Health Trend <span class="material-symbols-outlined text-on-surface-variant text-[18px]">info</span>
+</h3>
+<p class="text-label-sm text-on-surface-variant">Health Score (%) over the current fiscal year</p>
+</div>
+<div class="bg-surface-container-high rounded-lg px-3 py-1.5 border border-white/5 self-start">
+<select class="bg-transparent border-none focus:ring-0 text-label-md text-on-surface cursor-pointer p-0 pr-6">
+<option>Monthly</option>
+<option>Weekly</option>
+<option>Daily</option>
+</select>
+</div>
+</div>
+<div class="h-56 sm:h-64 w-full relative">
+<!-- Simulated Chart Content -->
+<div class="absolute inset-0 flex items-end justify-between px-2 opacity-10 mb-4">
+<div class="w-[1px] h-full bg-white"></div>
+<div class="w-[1px] h-full bg-white"></div>
+<div class="w-[1px] h-full bg-white"></div>
+<div class="w-[1px] h-full bg-white"></div>
+<div class="w-[1px] h-full bg-white"></div>
+<div class="w-[1px] h-full bg-white"></div>
+</div>
+<svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 200">
+<defs>
+<linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#00C2FF" stop-opacity="0.5"></stop>
+<stop offset="100%" stop-color="#00C2FF" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M0 150 Q 100 120, 200 140 T 400 80 T 600 110 T 800 40 L 800 200 L 0 200 Z" fill="url(#chartGradient)"></path>
+<path class="drop-shadow-[0_0_8px_rgba(0,194,255,0.8)]" d="M0 150 Q 100 120, 200 140 T 400 80 T 600 110 T 800 40" fill="none" stroke="#00C2FF" stroke-linecap="round" stroke-width="3"></path>
+<!-- Tooltip Indicator -->
+<circle class="animate-pulse shadow-[0_0_10px_#00C2FF]" cx="350" cy="95" fill="#00C2FF" r="5"></circle>
+<line stroke="#00C2FF" stroke-dasharray="4" stroke-opacity="0.5" x1="350" x2="350" y1="95" y2="200"></line>
+</svg>
+<!-- Tooltip Box -->
+<div class="trend-tooltip absolute top-10 left-[360px] glass-card rounded-xl p-3 border-primary/50 shadow-2xl z-10 w-40 p-4">
+<p class="text-[10px] text-on-surface-variant font-bold">15 May 2025</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<p class="text-label-md text-on-surface">Health Score</p>
+</div>
+<p class="text-headline-sm font-bold text-on-surface mt-1">82%</p>
+</div>
+</div>
+<div class="flex justify-between mt-6 px-2 mb-4">
+<span class="text-[10px] text-on-surface-variant font-bold">JAN</span>
+<span class="text-[10px] text-on-surface-variant font-bold">FEB</span>
+<span class="text-[10px] text-on-surface-variant font-bold">MAR</span>
+<span class="text-[10px] text-on-surface-variant font-bold">APR</span>
+<span class="text-[10px] text-on-surface-variant font-bold">MAY</span>
+<span class="text-[10px] text-on-surface-variant font-bold">JUN</span>
+<span class="text-[10px] text-on-surface-variant font-bold">JUL</span>
+<span class="text-[10px] text-on-surface-variant font-bold">AUG</span>
+</div>
+</div>
+<!-- Plastic Pollution by Region -->
+<div class="lg:col-span-4 glass-card rounded-2xl p-4">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Regional Pollution</h3>
+<p class="text-label-sm text-on-surface-variant">Metric: Tons detected</p>
+</div>
+<div class="bg-surface-container-high rounded-lg px-2 py-1 border border-white/5">
+<span class="text-label-sm text-on-surface opacity-60">Tons</span>
+</div>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm text-on-surface mb-1 mb-4">
+<span class="">Pacific Ocean</span>
+<span class="font-bold">142</span>
+</div>
+<div class="h-3 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full w-[85%] bg-gradient-to-r from-red-500 to-orange-500 shadow-[0_0_10px_rgba(239,68,68,0.3)]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm text-on-surface mb-1 mb-4">
+<span class="">Indian Ocean</span>
+<span class="font-bold">98</span>
+</div>
+<div class="h-3 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full w-[60%] bg-gradient-to-r from-orange-400 to-yellow-400"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm text-on-surface mb-1 mb-4">
+<span class="">Atlantic Ocean</span>
+<span class="font-bold">56</span>
+</div>
+<div class="h-3 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full w-[35%] bg-gradient-to-r from-yellow-400 to-green-400"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm text-on-surface mb-1 mb-4">
+<span class="">Arctic Ocean</span>
+<span class="font-bold">23</span>
+</div>
+<div class="h-3 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full w-[15%] bg-gradient-to-r from-green-400 to-cyan-400"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm text-on-surface mb-1 mb-4">
+<span class="">Southern Ocean</span>
+<span class="font-bold">12</span>
+</div>
+<div class="h-3 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full w-[8%] bg-cyan-400"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Data Row -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+<!-- Coral Health Status -->
+<div class="lg:col-span-3 glass-card rounded-2xl flex flex-col items-center p-4">
+<h3 class="w-full font-headline-md text-headline-md text-on-surface mb-8">Coral Health</h3>
+<div class="relative w-40 h-40 sm:w-48 sm:h-48 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="transparent" r="42" stroke="rgba(255,255,255,0.05)" stroke-width="12"></circle>
+<circle cx="50" cy="50" fill="transparent" r="42" stroke="#00C2FF" stroke-dasharray="190 264" stroke-linecap="round" stroke-width="12"></circle>
+<circle cx="50" cy="50" fill="transparent" r="42" stroke="#FFA726" stroke-dasharray="45 264" stroke-dashoffset="-190" stroke-linecap="round" stroke-width="12"></circle>
+<circle cx="50" cy="50" fill="transparent" r="42" stroke="#EF5350" stroke-dasharray="29 264" stroke-dashoffset="-235" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-display-lg font-bold text-on-surface leading-none">72<span class="text-headline-md font-normal opacity-40">%</span></span>
+<span class="text-tertiary font-bold tracking-widest text-[10px] uppercase mt-1">Healthy</span>
+</div>
+</div>
+<div class="w-full space-y-3">
+<div class="flex items-center justify-between text-label-sm mb-4">
+<div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-sm bg-primary"></span> Healthy</div>
+<span class="font-bold">72%</span>
+</div>
+<div class="flex items-center justify-between text-label-sm mb-4">
+<div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-sm bg-[#FFA726]"></span> Warning</div>
+<span class="font-bold">18%</span>
+</div>
+<div class="flex items-center justify-between text-label-sm mb-4">
+<div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-sm bg-[#EF5350]"></span> Critical</div>
+<span class="font-bold">10%</span>
+</div>
+</div>
+</div>
+<!-- Water Quality Overview -->
+<div class="lg:col-span-5 glass-card rounded-2xl p-4">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-8">Water Quality Overview</h3>
+<div class="grid grid-cols-2 gap-4 h-[calc(100%-60px)]">
+<div class="bg-white/5 rounded-xl p-4 border border-white/5">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary-container">thermostat</span>
+<span class="text-label-sm text-on-surface-variant">Temperature</span>
+</div>
+<h4 class="text-headline-md font-bold text-on-surface">24°C</h4>
+<p class="text-tertiary text-[10px] font-bold mt-1">↑ 1.2°C</p>
+</div>
+<div class="bg-white/5 rounded-xl p-4 border border-white/5">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim">science</span>
+<span class="text-label-sm text-on-surface-variant">pH Level</span>
+</div>
+<h4 class="text-headline-md font-bold text-on-surface">8.1</h4>
+<p class="text-tertiary text-[10px] font-bold mt-1">NORMAL</p>
+</div>
+<div class="bg-white/5 rounded-xl p-4 border border-white/5">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-surface-tint">opacity</span>
+<span class="text-label-sm text-on-surface-variant">Salinity</span>
+</div>
+<h4 class="text-headline-md font-bold text-on-surface">35 <span class="text-label-sm opacity-50">ppt</span></h4>
+<p class="text-tertiary text-[10px] font-bold mt-1">OPTIMAL</p>
+</div>
+<div class="bg-white/5 rounded-xl p-4 border border-white/5">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">bubble_chart</span>
+<span class="text-label-sm text-on-surface-variant">Oxygen</span>
+</div>
+<h4 class="text-headline-md font-bold text-on-surface">7.8 <span class="text-label-sm opacity-50">mg/L</span></h4>
+<p class="text-tertiary text-[10px] font-bold mt-1">STABLE</p>
+</div>
+</div>
+</div>
+<!-- Recent Threat Detections -->
+<div class="lg:col-span-4 glass-card rounded-2xl p-4">
+<div class="flex items-center justify-between mb-6 mb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Threat Alerts</h3>
+<a class="text-primary text-label-sm font-bold hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-4 max-h-80 overflow-y-auto custom-scrollbar pr-2">
+<!-- Alert Item -->
+<div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5 group hover:border-primary/30 transition-all">
+<div class="w-12 h-12 rounded-lg bg-error/10 flex items-center justify-center text-error border border-error/20 group-hover:scale-110 transition-transform shrink-0">
+<span class="material-symbols-outlined">delete_forever</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-4 gap-2">
+<h5 class="text-label-md font-bold text-on-surface">Plastic Waste Cluster</h5>
+<span class="text-[10px] text-on-surface-variant font-bold shrink-0">10:45 AM</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Arabian Sea • Sector 2</p>
+<span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-error/20 text-error border border-error/20">HIGH</span>
+</div>
+</div>
+<!-- Alert Item -->
+<div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5 group hover:border-primary/30 transition-all">
+<div class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500 border border-orange-500/20 shrink-0">
+<span class="material-symbols-outlined">emergency_heat</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-4 gap-2">
+<h5 class="text-label-md font-bold text-on-surface">Coral Bleaching Risk</h5>
+<span class="text-[10px] text-on-surface-variant font-bold shrink-0">11:30 AM</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Great Barrier Reef</p>
+<span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-orange-500/20 text-orange-500 border border-orange-500/20">MEDIUM</span>
+</div>
+</div>
+<!-- Alert Item -->
+<div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5 group hover:border-primary/30 transition-all">
+<div class="w-12 h-12 rounded-lg bg-red-600/10 flex items-center justify-center text-red-600 border border-red-600/20 shrink-0">
+<span class="material-symbols-outlined">oil_barrel</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-4 gap-2">
+<h5 class="text-label-md font-bold text-on-surface">Oil Spill Potential</h5>
+<span class="text-[10px] text-on-surface-variant font-bold shrink-0">01:10 PM</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Gulf of Mexico</p>
+<span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-red-600/20 text-red-600 border border-red-600/20">HIGH</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+<!-- Marine Species Trend -->
+<div class="lg:col-span-4 glass-card rounded-2xl p-4">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Population Trends</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-xl mb-4 gap-2">
+<div class="flex items-center gap-3 min-w-0">
+<span class="w-2 h-10 bg-primary rounded-full shrink-0"></span>
+<div class="min-w-0">
+<p class="text-label-sm text-on-surface-variant">Blue Whale</p>
+<p class="text-headline-sm font-bold text-on-surface">12,450</p>
+</div>
+</div>
+<span class="text-tertiary font-bold shrink-0">+12%</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-xl mb-4 gap-2">
+<div class="flex items-center gap-3 min-w-0">
+<span class="w-2 h-10 bg-tertiary rounded-full shrink-0"></span>
+<div class="min-w-0">
+<p class="text-label-sm text-on-surface-variant">Sea Turtle</p>
+<p class="text-headline-sm font-bold text-on-surface">45,210</p>
+</div>
+</div>
+<span class="text-tertiary font-bold shrink-0">+5.4%</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-xl mb-4 gap-2">
+<div class="flex items-center gap-3 min-w-0">
+<span class="w-2 h-10 bg-secondary rounded-full shrink-0"></span>
+<div class="min-w-0">
+<p class="text-label-sm text-on-surface-variant">Great White Shark</p>
+<p class="text-headline-sm font-bold text-on-surface">8,902</p>
+</div>
+</div>
+<span class="text-error font-bold shrink-0">-2.1%</span>
+</div>
+</div>
+</div><div class="lg:col-span-8 glass-card rounded-2xl overflow-hidden relative p-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+            <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+                Marine Species Population Trend <span class="material-symbols-outlined text-on-surface-variant text-[18px]">monitoring</span>
+            </h3>
+            <p class="text-label-sm text-on-surface-variant">Population counts (thousands) over the last 12 months</p>
+        </div>
+        <div class="flex items-center gap-4 flex-wrap">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary"></span>
+                <span class="text-[10px] text-on-surface-variant font-bold uppercase">Whales</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                <span class="text-[10px] text-on-surface-variant font-bold uppercase">Turtles</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                <span class="text-[10px] text-on-surface-variant font-bold uppercase">Sharks</span>
+            </div>
+        </div>
+    </div>
+    <div class="h-40 sm:h-48 w-full relative">
+        <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 200">
+            <defs>
+                <linearGradient id="whaleGrad" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#92d9ff" stop-opacity="0.2"></stop>
+                    <stop offset="100%" stop-color="#92d9ff" stop-opacity="0"></stop>
+                </linearGradient>
+            </defs>
+            <!-- Blue Whale Area -->
+            <path d="M0 160 Q 100 150, 200 155 T 400 130 T 600 140 T 800 110 L 800 200 L 0 200 Z" fill="url(#whaleGrad)"></path>
+            <path class="drop-shadow-[0_0_8px_rgba(146,217,255,0.6)]" d="M0 160 Q 100 150, 200 155 T 400 130 T 600 140 T 800 110" fill="none" stroke="#92d9ff" stroke-width="2"></path>
+            
+            <!-- Sea Turtle Line (Emerald/Tertiary) -->
+            <path class="drop-shadow-[0_0_8px_rgba(0,234,195,0.6)]" d="M0 120 Q 150 130, 300 100 T 500 110 T 800 70" fill="none" stroke="#00eac3" stroke-width="2"></path>
+            
+            <!-- Shark Line (Violet/Secondary) -->
+            <path class="drop-shadow-[0_0_8px_rgba(188,199,218,0.6)]" d="M0 80 Q 200 90, 400 70 T 600 85 T 800 95" fill="none" stroke="#bcc7da" stroke-width="2" stroke-dasharray="4 2"></path>
+        </svg>
+    </div>
+    <div class="flex justify-between mt-4 px-2 mb-4">
+        <span class="text-[10px] text-on-surface-variant font-bold">Q1</span>
+        <span class="text-[10px] text-on-surface-variant font-bold">Q2</span>
+        <span class="text-[10px] text-on-surface-variant font-bold">Q3</span>
+        <span class="text-[10px] text-on-surface-variant font-bold">Q4</span>
+    </div>
+</div>
+<!-- Pollution Heatmap -->
+<div class="lg:col-span-5 glass-card rounded-2xl relative group overflow-hidden p-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Global Heatmap</h3>
+<button class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-[20px]">fullscreen</span>
+</button>
+</div>
+<div class="relative w-full aspect-video rounded-xl bg-surface-container-highest overflow-hidden border border-white/5">
+<img class="w-full h-full object-cover opacity-60" data-alt="A stylized digital global world map with high-tech glowing outlines and data visualization overlays. Vivid bioluminescent hotspots in orange and red represent pollution centers across oceans. The overall aesthetic is dark and cinematic with deep navy and cyan hues, featuring a holographic interface quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdZ48p33RThPW5sbjJLCvKg78pgE8xnQSGNWw37225Idgy6COe2j9PzqPK8xUoa4fVmOVg0r5Qn9LQiPl1kkluKC_0t1m6xyCYgtYmpeBD1nkBqJWGQcm8dUgDXSs4r4TRM_h5TNrspT72ulXjKGSvg43l7rxcOFi7d6EljMuQGILbfanwD3Ak-zRrV9cq81HeYtYLC_pkQfSnguA9xjdDTOLlbK6pVdDPHTG20Gj2Ompg8C5gk-YO5YOEBNqQIOXsO1D8czCspW45">
+<!-- Heatmap Hotspots -->
+<div class="absolute top-1/4 left-1/3 w-8 h-8 rounded-full bg-red-500/40 animate-ping blur-xl"></div>
+<div class="absolute top-1/2 left-2/3 w-12 h-12 rounded-full bg-orange-500/30 animate-pulse blur-2xl"></div>
+<div class="absolute bottom-1/4 right-1/4 w-10 h-10 rounded-full bg-red-500/50 animate-ping blur-xl"></div>
+</div>
+<div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4">
+<div class="flex items-center gap-3 sm:gap-4 flex-wrap text-[10px] font-bold uppercase text-on-surface-variant">
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> Low Risk</span>
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-orange-400"></span> Moderate</span>
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500"></span> High Risk</span>
+</div>
+<div class="flex items-center gap-1 text-[10px] font-bold text-primary">
+<span class="material-symbols-outlined text-[14px]">sensors</span> LIVE SATELLITE DATA
+                        </div>
+</div>
+</div>
+<!-- AI Insights Sidebar -->
+<div class="lg:col-span-4 glass-card rounded-2xl p-4"><div class="flex items-center justify-between mb-6 mb-4"><h3 class="font-headline-md text-headline-md text-on-surface">Active Drone Status</h3><span class="flex items-center gap-1 text-[10px] font-bold text-tertiary"><span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> LIVE</span></div><div class="space-y-3"><div class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 mb-4 gap-2"><div class="flex items-center gap-3 min-w-0"><div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0"><span class="material-symbols-outlined text-[18px]">flight_takeoff</span></div><div class="min-w-0"><p class="text-label-sm font-bold text-on-surface">Drone 01</p><p class="text-[10px] text-on-surface-variant">450m depth</p></div></div><div class="text-right shrink-0"><p class="text-label-sm font-bold text-tertiary">82%</p><p class="text-[10px] text-on-surface-variant uppercase">Battery</p></div></div><div class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 mb-4 gap-2"><div class="flex items-center gap-3 min-w-0"><div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0"><span class="material-symbols-outlined text-[18px]">flight_takeoff</span></div><div class="min-w-0"><p class="text-label-sm font-bold text-on-surface">Drone 02</p><p class="text-[10px] text-on-surface-variant">320m depth</p></div></div><div class="text-right shrink-0"><p class="text-label-sm font-bold text-tertiary">68%</p><p class="text-[10px] text-on-surface-variant uppercase">Battery</p></div></div><div class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 mb-4 gap-2"><div class="flex items-center gap-3 min-w-0"><div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0"><span class="material-symbols-outlined text-[18px]">flight_takeoff</span></div><div class="min-w-0"><p class="text-label-sm font-bold text-on-surface">Drone 03</p><p class="text-[10px] text-on-surface-variant">500m depth</p></div></div><div class="text-right shrink-0"><p class="text-label-sm font-bold text-tertiary">91%</p><p class="text-[10px] text-on-surface-variant uppercase">Battery</p></div></div><div class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 mb-4 gap-2"><div class="flex items-center gap-3 min-w-0"><div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0"><span class="material-symbols-outlined text-[18px]">flight_takeoff</span></div><div class="min-w-0"><p class="text-label-sm font-bold text-on-surface">Drone 04</p><p class="text-[10px] text-on-surface-variant">280m depth</p></div></div><div class="text-right shrink-0"><p class="text-label-sm font-bold text-tertiary">75%</p><p class="text-[10px] text-on-surface-variant uppercase">Battery</p></div></div></div></div><div class="lg:col-span-3 glass-card rounded-2xl p-4">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">AI Insights</h3>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+</div>
+<p class="text-label-sm text-on-surface leading-relaxed">
+<strong class="text-primary">Ocean health</strong> improved by <span class="text-tertiary">4.2%</span>. Decreased microplastics in North Pacific is the key driver.
+                            </p>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</div>
+<p class="text-label-sm text-on-surface leading-relaxed">
+<strong class="text-orange-500">Coral bleaching</strong> alert: Temperature spikes detected in Sector 4. Immediate intervention recommended.
+                            </p>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-tint/20 flex items-center justify-center text-surface-tint">
+<span class="material-symbols-outlined text-[18px]">sailing</span>
+</div>
+<p class="text-label-sm text-on-surface leading-relaxed">
+<strong class="text-surface-tint">Migratory paths</strong> shifting 120km south due to current anomalies. Updating drone paths.
+                            </p>
+</div>
+</div>
+<button class="w-full mt-8 py-3 rounded-xl border border-primary/30 text-primary font-bold text-label-md hover:bg-primary/5 transition-all">
+                        Generate Strategy
+                    </button>
+</div>
+</div>
+<!-- Environmental Reports Footer Section -->
+<section class="glass-card rounded-2xl p-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Environmental Reports</h3>
+<div class="flex items-center gap-2">
+<span class="text-label-sm text-on-surface-variant">Sort by:</span>
+<select class="bg-transparent border-none focus:ring-0 text-label-sm text-on-surface p-0">
+<option>Latest First</option>
+<option>File Size</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="p-4 bg-white/5 rounded-xl border border-white/5 flex flex-col justify-between hover:bg-white/10 transition-all group mb-4">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">description</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div>
+<h5 class="text-label-md font-bold text-on-surface">Ocean Health Report</h5>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">May 2025 • 24.4 MB</p>
+</div>
+<button class="mt-4 flex items-center justify-center gap-2 w-full py-2 bg-primary/10 text-primary rounded-lg font-label-sm group-hover:bg-primary group-hover:text-surface transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span> Download
+                        </button>
+</div>
+<div class="p-4 bg-white/5 rounded-xl border border-white/5 flex flex-col justify-between hover:bg-white/10 transition-all group mb-4">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500">
+<span class="material-symbols-outlined text-[28px]">delete_sweep</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div>
+<h5 class="text-label-md font-bold text-on-surface">Plastic Pollution Analysis</h5>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">May 2025 • 18.7 MB</p>
+</div>
+<button class="mt-4 flex items-center justify-center gap-2 w-full py-2 bg-primary/10 text-primary rounded-lg font-label-sm group-hover:bg-primary group-hover:text-surface transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span> Download
+                        </button>
+</div>
+<div class="p-4 bg-white/5 rounded-xl border border-white/5 flex flex-col justify-between hover:bg-white/10 transition-all group mb-4">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[28px]">pets</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div>
+<h5 class="text-label-md font-bold text-on-surface">Marine Biodiversity</h5>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">April 2025 • 31.2 MB</p>
+</div>
+<button class="mt-4 flex items-center justify-center gap-2 w-full py-2 bg-primary/10 text-primary rounded-lg font-label-sm group-hover:bg-primary group-hover:text-surface transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span> Download
+                        </button>
+</div>
+<div class="p-4 bg-white/5 rounded-xl border border-white/5 flex flex-col justify-between hover:bg-white/10 transition-all group mb-4">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[28px]">thermostat</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div>
+<h5 class="text-label-md font-bold text-on-surface">Climate Impact Report</h5>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">May 2025 • 22.1 MB</p>
+</div>
+<button class="mt-4 flex items-center justify-center gap-2 w-full py-2 bg-primary/10 text-primary rounded-lg font-label-sm group-hover:bg-primary group-hover:text-surface transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span> Download
+                        </button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating AI Assistant Button (Contextual FAB) -->
+<button class="fab-assistant fixed bottom-8 right-8 w-16 h-16 rounded-full bg-primary-container text-surface flex items-center justify-center shadow-[0_0_30px_rgba(0,194,255,0.4)] hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[32px] animate-pulse">smart_toy</span>
+</button>
+<script>
+        // Micro-interactions and effects
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Sidebar is managed by navigation.js
+    </script>
+
+
+</body></html>
